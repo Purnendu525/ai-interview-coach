@@ -1,0 +1,28 @@
+# --- secrets ---
+.env
+.env.local
+.env.*.local
+backend/.env
+frontend/.env.local
+
+# --- frontend (Next.js) ---
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.vercel/
+frontend/next-env.d.ts.bak
+frontend/*.tsbuildinfo
+
+# --- backend (Python) ---
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/.venv/
+backend/venv/
+backend/.pytest_cache/
+
+# --- OS / editor ---
+.DS_Store
+.vscode/
+.idea/

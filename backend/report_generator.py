@@ -8,8 +8,12 @@ model's judgment; the band and pass/fail are derived deterministically
 from that score so the rubric is always applied consistently.
 """
 
+import logging
+
 from models import Difficulty, Message
 from groq_client import chat_json, GroqNotConfigured
+
+logger = logging.getLogger("ai-interview-coach")
 
 SYSTEM_PROMPT = """You are grading a completed technical interview transcript.
 
@@ -83,4 +87,5 @@ def generate_report(topic: str, difficulty: Difficulty, conversation: list[Messa
     except GroqNotConfigured:
         raise
     except Exception:
+        logger.exception("Groq call failed in generate_report; using fallback report")
         return _fallback_report()

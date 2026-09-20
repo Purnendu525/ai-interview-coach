@@ -8,8 +8,12 @@ JSON object so the backend never has to guess where the question ends
 and the control signal begins.
 """
 
+import logging
+
 from models import Difficulty, Message
 from groq_client import chat_json, GroqNotConfigured
+
+logger = logging.getLogger("ai-interview-coach")
 
 DIFFICULTY_BRIEF = {
     "easy": "basic definitions and recall. Ask about core concepts, terminology, "
@@ -123,5 +127,8 @@ def get_next_message(topic: str, difficulty: Difficulty, conversation: list[Mess
     except GroqNotConfigured:
         raise
     except Exception:
-        # Never crash the interview over a flaky model response — degrade gracefully.
+        # Never crash the interview over a flaky model response — but always log
+        # the real cause, since silently returning a canned line hides bugs like
+        # a deprecated model name.
+        logger.exception("Groq call failed in get_next_message; using fallback message")
         return _fallback_message(is_first)
